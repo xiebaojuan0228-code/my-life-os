@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸记录美好的一天<</title>
+
+<style>
+body{
+    margin:0;
+    font-family:"Microsoft YaHei",sans-serif;
+    background:#F5F7FA;
+    color:#444;
+}
+
+/* 页面容器 */
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:30px 20px;
+}
+
+/* 顶部导航 */
+header{
+    background:linear-gradient(135deg,#5A7BB5,#8FA8D6);
+    color:white;
+    border-radius:30px;
+    padding:35px;
+    margin-bottom:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+header h1{
+    margin:0;
+    font-size:40px;
+}
+
+.date{
+    margin-top:10px;
+    font-size:18px;
+    opacity:0.9;
+}
+
+.quote{
+    margin-top:15px;
+    font-style:italic;
+    opacity:0.95;
+}
+
+/* 仪表盘统计 */
+.progress-box{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:white;
+    border-radius:25px;
+    padding:25px;
+    margin-bottom:30px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
+}
+
+.progress-bar{
+    width:70%;
+    height:18px;
+    background:#ECEFF5;
+    border-radius:50px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+    border-radius:50px;
+    background:linear-gradient(90deg,#FFB7C5,#89B4FA);
+    transition:0.4s;
+}
+
+/* 两列仪表盘布局 */
+.dashboard{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+/* 卡片 */
+.card{
+    background:white;
+    border-radius:28px;
+    padding:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.06);
+    transition:all .3s ease;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(0,0,0,0.10);
+}
+
+.card h2{
+    margin-top:0;
+    margin-bottom:20px;
+    font-size:24px;
+}
+
+/* 输入框 */
+textarea,
+input,
+select{
+    width:100%;
+    box-sizing:border-box;
+    padding:14px;
+    border:2px solid #EEF2F7;
+    border-radius:16px;
+    font-size:15px;
+    background:#FAFBFC;
+}
+
+textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+textarea:focus,
+input:focus,
+select:focus{
+    outline:none;
+    border-color:#8FA8D6;
+}
+
+/* 按钮 */
+button{
+    background:#5A7BB5;
+    color:white;
+    border:none;
+    border-radius:16px;
+    padding:12px 20px;
+    cursor:pointer;
+    font-size:15px;
+    transition:.3s;
+}
+
+button:hover{
+    background:#49699B;
+}
+
+/* 待办 */
+.todo-item{
+    margin-bottom:15px;
+    font-size:16px;
+}
+
+.todo-item input{
+    width:auto;
+    margin-right:10px;
+}
+
+/* 底部 */
+.footer{
+    text-align:center;
+    margin-top:40px;
+    color:#999;
+}
+.today-focus{
+    background:#FFF6B8;
+    padding:18px;
+    border-radius:20px;
+    margin-top:20px;
+    transform:rotate(-1deg);
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.today-focus h3{
+    margin-top:0;
+}
+
+.today-focus input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    margin-top:10px;
+    font-size:16px;
+}
+
+.sticker-box{
+    display:inline-block;
+    margin-top:15px;
+    padding:10px 18px;
+    background:#FFDDEE;
+    border-radius:999px;
+    font-size:18px;
+    transform:rotate(2deg);
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}    
+
+/* 手机适配 */
+@media(max-width:768px){
+
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+    header h1{
+        font-size:30px;
+    }
+
+    .progress-box{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .progress-bar{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+   <h1>🌷 记录美好的一天</h1>
+
+    <div class="date" id="today"></div>
+
+    <div class="quote" id="quote">
+        今天也请温柔地对待自己。
+    </div>
+    
+<div class="today-focus">
+    <h3>⭐ 今天最重要的一件事</h3>
+
+    <input type="text"
+           id="focus"
+           placeholder="写下今天最重要的一件事">
+</div>
+
+<div class="sticker-box">
+    🎀 今日贴纸：🐰
+</div>
+
+</header>
+
+<div class="progress-box">
+
+    <h3>📊 今日完成进度</h3>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <p id="progressText">完成度：0%</p>
+
+</div>
+    
+<div class="dashboard">
+    
+<!-- 今日待办 -->
+<div class="card">
+    <h2>📝 今日待办</h2>
+
+    <div class="todo-item">
+        <label><input type="checkbox" class="task"> 今天最重要的第一件事</label>
+    </div>
+
+    <div class="todo-item">
+        <label><input type="checkbox" class="task"> 今天最重要的第二件事</label>
+    </div>
+
+    <div class="todo-item">
+        <label><input type="checkbox" class="task"> 今天最重要的第三件事</label>
+    </div>
+
+    <textarea id="todo" placeholder="还有什么待办事项？"></textarea>
+</div>
+
+<!-- 饮食记录 -->
+<div class="card">
+    <h2>🍎 饮食记录</h2>
+
+    <textarea id="breakfast" placeholder="早餐吃了什么？"></textarea>
+
+    <br><br>
+
+    <textarea id="lunch" placeholder="午餐吃了什么？"></textarea>
+
+    <br><br>
+
+    <textarea id="dinner" placeholder="晚餐吃了什么？"></textarea>
+</div>
+
+<!-- 喝水打卡 -->
+<div class="card">
+    <h2>💧 喝水打卡</h2>
+
+    <p>今天喝水：<span id="waterCount">0</span> / 8 杯</p>
+
+    <button type="button" id="waterBtn">
+    ＋ 喝了一杯水
+</button>
+
+<button type="button" id="waterMinusBtn">
+    － 撤回一杯
+</button>
+</div>
+
+<!-- 运动记录 -->
+<div class="card">
+    <h2>🏃 运动记录</h2>
+
+    <textarea id="exercise"
+        placeholder="例如：快走30分钟、瑜伽20分钟"></textarea>
+
+    <br><br>
+
+    <input id="calories"
+        type="number"
+        placeholder="消耗热量（kcal）">
+</div>
+
+</div>
+
+<div class="dashboard">
+<!-- 情绪日记 -->
+<div class="card">
+    <h2>😊 今日心情</h2>
+
+    <select id="mood">
+        <option value="">请选择今天的心情</option>
+        <option>😀 开心</option>
+        <option>😌 平静</option>
+        <option>😐 一般</option>
+        <option>😢 难过</option>
+        <option>😡 生气</option>
+    </select>
+
+    <br><br>
+
+    <textarea id="moodNote"
+        placeholder="今天发生了什么？"></textarea>
+</div>
+
+<!-- 学习打卡 -->
+<div class="card">
+    <h2>📚 学习成长</h2>
+
+    <textarea id="study"
+        placeholder="今天学习了什么？"></textarea>
+</div>
+
+<!-- 穿搭记录 -->
+<div class="card">
+    <h2>👗 今日穿搭</h2>
+
+    <textarea id="outfit"
+        placeholder="记录今天的穿搭灵感"></textarea>
+</div>
+
+<!-- 睡眠记录 -->
+<div class="card">
+    <h2>🌙 睡眠记录</h2>
+
+    <input id="sleep"
+        placeholder="例如：23:00 - 07:00">
+
+</div>
+
+<!-- 每日复盘 -->
+<div class="card">
+    <h2>✨ 每日复盘</h2>
+
+    <textarea id="gratitude"
+        placeholder="今天最感谢的一件事"></textarea>
+
+    <br><br>
+
+    <textarea id="tomorrow"
+        placeholder="明天最重要的一件事"></textarea>
+</div>
+
+</div>
+    
+<div class="footer">
+    🌷 愿你温柔坚定，认真生活。
+</div>
+
+<script>
+/* 日期 */
+document.getElementById("today").innerText =
+"☀️ " + new Date().toLocaleDateString("zh-CN",{
+    year:"numeric",
+    month:"long",
+    day:"numeric",
+    weekday:"long"
+});
+
+/* 温柔语录 */
+const quotes = [
+    "🌷 今天也值得被温柔记录。",
+    "📖 平凡的小日子，藏着闪闪发光的瞬间。",
+    "☁️ 慢一点没关系，幸福不会迟到。",
+    "🌸 愿今天的你，也被自己好好爱着。",
+    "🍓 把普通的一天，过成喜欢的模样。",
+    "✨ 每一个认真生活的瞬间，都值得收藏。",
+    "🧸 今天一定会发生一点小幸运。",
+    "🌙 晚安之前，别忘了夸夸努力的自己。"
+];
+
+document.getElementById("quote").innerText =
+quotes[Math.floor(Math.random()*quotes.length)];
+
+/* 自动保存 */
+const saveIds = [
+    "todo",
+    "breakfast",
+    "lunch",
+    "dinner",
+    "exercise",
+    "calories",
+    "mood",
+    "moodNote",
+    "study",
+    "outfit",
+    "sleep",
+    "gratitude",
+    "tomorrow"
+];
+
+saveIds.forEach(id=>{
+    const el = document.getElementById(id);
+
+    if(localStorage.getItem(id)){
+        el.value = localStorage.getItem(id);
+    }
+
+    el.addEventListener("input",()=>{
+        localStorage.setItem(id,el.value);
+    });
+});
+
+/* 喝水记录 */
+let water =
+parseInt(localStorage.getItem("waterCount")) || 0;
+
+document.getElementById("waterCount").innerText = water;
+
+document.getElementById("waterBtn")
+.addEventListener("click",()=>{
+
+    if(water < 8){
+        water++;
+        localStorage.setItem("waterCount",water);
+        document.getElementById("waterCount").innerText = water;
+    }
+
+    updateProgress();
+});
+document.getElementById("waterMinusBtn")
+.addEventListener("click",()=>{
+
+    if(water > 0){
+        water--;
+        localStorage.setItem("waterCount",water);
+        document.getElementById("waterCount").innerText = water;
+    }
+
+    updateProgress();
+});
+
+/* 待办完成率 */
+document.querySelectorAll(".task").forEach(task=>{
+
+    task.checked =
+    localStorage.getItem(task.parentElement.innerText)==="true";
+
+    task.addEventListener("change",()=>{
+
+        localStorage.setItem(
+            task.parentElement.innerText,
+            task.checked
+        );
+
+        updateProgress();
+    });
+});
+
+function updateProgress(){
+
+    const tasks =
+    document.querySelectorAll(".task");
+
+    let done = 0;
+
+    tasks.forEach(task=>{
+        if(task.checked){
+            done++;
+        }
+    });
+
+    let percent =
+    Math.round(done/tasks.length*100);
+
+    document.getElementById("progressFill")
+    .style.width = percent + "%";
+
+    document.getElementById("progressText")
+    .innerText = "完成度：" + percent + "%";
+}
+
+updateProgress();
+</script>
+
+</body>
+</html>

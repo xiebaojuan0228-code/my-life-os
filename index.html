@@ -299,8 +299,12 @@ button:hover{
     <p>今天喝水：<span id="waterCount">0</span> / 8 杯</p>
 
     <button type="button" id="waterBtn">
-        + 喝了一杯水
-    </button>
+    ＋ 喝了一杯水
+</button>
+
+<button type="button" id="waterMinusBtn">
+    － 撤回一杯
+</button>
 </div>
 
 <!-- 运动记录 -->
@@ -448,6 +452,17 @@ document.getElementById("waterBtn")
 
     if(water < 8){
         water++;
+        localStorage.setItem("waterCount",water);
+        document.getElementById("waterCount").innerText = water;
+    }
+
+    updateProgress();
+});
+document.getElementById("waterMinusBtn")
+.addEventListener("click",()=>{
+
+    if(water > 0){
+        water--;
         localStorage.setItem("waterCount",water);
         document.getElementById("waterCount").innerText = water;
     }

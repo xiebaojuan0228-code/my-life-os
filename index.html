@@ -9,110 +9,144 @@
 body{
     margin:0;
     font-family:"Microsoft YaHei",sans-serif;
-    background:linear-gradient(180deg,#fff5f8,#f7f8ff);
+    background:#F5F7FA;
     color:#444;
 }
 
+/* 页面容器 */
 .container{
-    max-width:900px;
+    max-width:1200px;
     margin:auto;
     padding:30px 20px;
 }
 
+/* 顶部导航 */
 header{
-    text-align:center;
+    background:linear-gradient(135deg,#5A7BB5,#8FA8D6);
+    color:white;
+    border-radius:30px;
+    padding:35px;
     margin-bottom:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
 }
 
 header h1{
-    color:#5b7db1;
-    font-size:42px;
-    margin-bottom:10px;
+    margin:0;
+    font-size:40px;
 }
 
 .date{
-    color:#777;
+    margin-top:10px;
     font-size:18px;
+    opacity:0.9;
 }
 
 .quote{
     margin-top:15px;
-    color:#888;
     font-style:italic;
+    opacity:0.95;
 }
 
+/* 仪表盘统计 */
 .progress-box{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
     background:white;
-    padding:20px;
-    border-radius:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-    margin-bottom:25px;
+    border-radius:25px;
+    padding:25px;
+    margin-bottom:30px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
 }
 
 .progress-bar{
-    width:100%;
-    height:24px;
-    background:#eee;
-    border-radius:20px;
+    width:70%;
+    height:18px;
+    background:#ECEFF5;
+    border-radius:50px;
     overflow:hidden;
 }
 
 .progress-fill{
     height:100%;
     width:0%;
-    background:linear-gradient(90deg,#ffb6c1,#a0c4ff);
-    transition:0.5s;
+    border-radius:50px;
+    background:linear-gradient(90deg,#FFB7C5,#89B4FA);
+    transition:0.4s;
 }
 
+/* 两列仪表盘布局 */
+.dashboard{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+/* 卡片 */
 .card{
     background:white;
+    border-radius:28px;
     padding:25px;
-    border-radius:25px;
-    margin-bottom:25px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    box-shadow:0 8px 20px rgba(0,0,0,0.06);
+    transition:all .3s ease;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 28px rgba(0,0,0,0.10);
 }
 
 .card h2{
     margin-top:0;
     margin-bottom:20px;
-    font-size:32px;
+    font-size:24px;
 }
 
+/* 输入框 */
 textarea,
 input,
 select{
     width:100%;
-    padding:15px;
-    border:2px solid #eee;
-    border-radius:15px;
-    font-size:16px;
     box-sizing:border-box;
+    padding:14px;
+    border:2px solid #EEF2F7;
+    border-radius:16px;
+    font-size:15px;
+    background:#FAFBFC;
 }
 
 textarea{
-    min-height:100px;
+    min-height:90px;
     resize:vertical;
 }
 
+textarea:focus,
+input:focus,
+select:focus{
+    outline:none;
+    border-color:#8FA8D6;
+}
+
+/* 按钮 */
 button{
-    background:#ff9eb5;
+    background:#5A7BB5;
     color:white;
     border:none;
-    border-radius:15px;
-    padding:12px 25px;
-    font-size:16px;
+    border-radius:16px;
+    padding:12px 20px;
     cursor:pointer;
-    margin-top:15px;
-    transition:0.3s;
+    font-size:15px;
+    transition:.3s;
 }
 
 button:hover{
-    background:#ff7e9e;
+    background:#49699B;
 }
 
+/* 待办 */
 .todo-item{
-    margin-bottom:12px;
-    font-size:18px;
+    margin-bottom:15px;
+    font-size:16px;
 }
 
 .todo-item input{
@@ -120,10 +154,33 @@ button:hover{
     margin-right:10px;
 }
 
+/* 底部 */
 .footer{
     text-align:center;
+    margin-top:40px;
     color:#999;
-    margin-top:30px;
+}
+
+/* 手机适配 */
+@media(max-width:768px){
+
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+    header h1{
+        font-size:30px;
+    }
+
+    .progress-box{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .progress-bar{
+        width:100%;
+    }
 }
 </style>
 </head>
@@ -153,6 +210,9 @@ button:hover{
     <p id="progressText">完成度：0%</p>
 
 </div>
+    
+<div class="dashboard">
+    
 <!-- 今日待办 -->
 <div class="card">
     <h2>📝 今日待办</h2>
@@ -268,10 +328,11 @@ button:hover{
     <textarea id="tomorrow"
         placeholder="明天最重要的一件事"></textarea>
 </div>
+
+</div>
+    
 <div class="footer">
     🌷 愿你温柔坚定，认真生活。
-</div>
-
 </div>
 
 <script>
